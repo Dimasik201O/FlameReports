@@ -9,6 +9,8 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.List;
+
 public class RedisManager {
     private JedisPool jedisPool;
     private JedisPubSub pubSub;
@@ -73,7 +75,7 @@ public class RedisManager {
                                 if(target.hasPermission("flamereports.alert")){
                                     target.sendMessage(Parser.color(""));
                                     target.sendMessage(Parser.color("&x&F&7&6&E&0&6 &n◢&f Новая жалоба на &x&8&6&E&F&8&8" + player));
-                                    target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ◤&f Режим: &x&D&B&A&9&4&6" + server + " &8| &x&D&B&A&9&4&6/report list"));
+                                    target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ◤&f Режим: &x&D&B&A&9&4&6" + server + " &f| &x&D&B&A&9&4&6/reportlist"));
                                     target.sendMessage(Parser.color(""));
                                 }
                             }

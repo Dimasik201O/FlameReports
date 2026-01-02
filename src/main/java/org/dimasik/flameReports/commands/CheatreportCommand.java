@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.dimasik.flameReports.FlameReports;
+import org.dimasik.flameReports.configuration.ConfigManager;
 import org.dimasik.flameReports.utils.Parser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +67,10 @@ public class CheatreportCommand implements TabExecutor {
                             return;
                         }
                         String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                        FlameReports.getInstance().getDatabaseManager().executeAddReportTransaction(target, sender.getName(), reason).thenAccept(integer -> sender.sendMessage(Parser.color("&#00D5FC ▶ &fВаша жалоба &#00D5FC#" + integer + "&f была &#00D5FCпринята&f. Наши сотрудники &#00D5FCрассмотрят ваш случай и проведут соответствующую проверку&f.")));
+                        FlameReports.getInstance().getDatabaseManager().executeAddReportTransaction(target, sender.getName(), reason).thenAccept(
+                                integer -> sender.sendMessage(Parser.color("&#00D5FC ▶ &fВаша жалоба &#00D5FC#" + integer + "&f была &#00D5FCпринята&f. Наши сотрудники &#00D5FCрассмотрят ваш случай и проведут соответствующую проверку&f."))).thenAccept(
+                                        (v) -> {FlameReports.getInstance().getRedisManager().publishMessage("alert " + p.getNickname() + " " + ConfigManager.getString("config.yml", "server.mode", "unknown"));
+                        });
                     });
                 });
                 return;

@@ -43,12 +43,12 @@ public class Parser {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public static void sendClickableMessage(Player player, List<String> lines, String url, String hover) {
+    public static void sendClickableMessage(Player player, List<String> lines, String command, String hover) {
         for (String line : lines) {
             hover = color(hover);
             BaseComponent[] components = parseColoredText(line);
             for (BaseComponent comp : components) {
-                comp.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, url));
+                comp.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
                 comp.setHoverEvent(new HoverEvent(
                         HoverEvent.Action.SHOW_TEXT,
                         new ComponentBuilder(hover).create()
