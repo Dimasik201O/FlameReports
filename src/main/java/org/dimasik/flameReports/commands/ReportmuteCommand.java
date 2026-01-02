@@ -44,7 +44,7 @@ public class ReportmuteCommand implements TabExecutor {
             }
             else {
                 String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                FlameReports.getInstance().getDatabaseManager().getMutes().addMute(p.getNickname(), reason, null).thenAccept((v) -> {
+                FlameReports.getInstance().getDatabaseManager().getMutes().addMute(p.getNickname(), reason, duration).thenAccept((v) -> {
                     FlameReports.getInstance().getRedisManager().publishMessage("mute " + sender.getName() + " " + p.getNickname() + " " + duration + " " + reason);
                 });
             }

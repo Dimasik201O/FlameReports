@@ -35,7 +35,7 @@ public class SqlMuteTable implements MuteTable {
                     insertStmt.setString(2, reason);
                     insertStmt.setLong(3, System.currentTimeMillis());
                     if (until != null) {
-                        insertStmt.setLong(4, until);
+                        insertStmt.setLong(4, until * 1000 + System.currentTimeMillis());
                     } else {
                         insertStmt.setNull(4, Types.BIGINT);
                     }
