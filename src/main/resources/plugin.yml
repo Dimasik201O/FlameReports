@@ -1,0 +1,12 @@
+name: FlameReports
+version: '1.0'
+main: org.dimasik.flameReports.FlameReports
+api-version: '1.21'
+commands:
+  cheatreport:
+    aliases:
+      - cr
+  reportlist:
+    permission: flamereports.reportlist
+  reportmute:
+    permission: flamereports.reportmute
