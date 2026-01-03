@@ -76,18 +76,25 @@ public class RedisManager {
                 try{
                     String action = message.split(" ")[0];
                     switch (action.toLowerCase()){
-                        case "alert" -> {
+                        case "report" -> {
                             String[] split = message.split(" ", 3);
                             String player = split[1];
                             String server = split[2];
-                            for(Player target : Bukkit.getOnlinePlayers()){
+                            for(Player target : Bukkit.getOnlinePlayers())
                                 if(target.hasPermission("flamereports.alert")){
                                     target.sendMessage(Parser.color(""));
                                     target.sendMessage(Parser.color("&x&F&7&6&E&0&6 &n◢&f Новая жалоба на &x&8&6&E&F&8&8" + player));
                                     target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ◤&f Режим: &x&D&B&A&9&4&6" + server + " &f| &x&D&B&A&9&4&6/reportlist"));
                                     target.sendMessage(Parser.color(""));
                                 }
-                            }
+                        }
+                        case "join" -> {
+                            String[] split = message.split(" ", 3);
+                            String player = split[1];
+                            String server = split[2];
+                            for(Player target : Bukkit.getOnlinePlayers())
+                                if(target.hasPermission("flamereports.alert"))
+                                    target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ▶ &fИгрок &x&8&6&E&F&8&8" + player + " &fзашел в онлайн на &x&8&6&E&F&8&8" + server + "&f, и на него есть незавершенные жалобы."));
                         }
                         case "finish" -> {
                             String[] split = message.split(" ", 3);

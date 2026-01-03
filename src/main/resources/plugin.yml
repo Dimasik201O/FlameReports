@@ -13,3 +13,5 @@ commands:
     permission: flamereports.reportlist
   reportmute:
     permission: flamereports.reportmute
+  findplayer:
+    permission: flamereports.findplayer

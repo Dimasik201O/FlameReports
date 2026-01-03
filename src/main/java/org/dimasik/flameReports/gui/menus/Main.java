@@ -72,7 +72,7 @@ public class Main extends Menu {
             itemStack.setItemMeta(itemMeta);
             inventory.setItem(45, itemStack);
         }
-        FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(viewer.getName()).thenAccept(reportBlock -> {
+        FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(viewer.getName()).thenAccept(reportBlock -> {
             if(reportBlock == null){
                 ItemStack itemStack = new ItemStack(Material.RED_CANDLE);
                 ItemMeta itemMeta = itemStack.getItemMeta();

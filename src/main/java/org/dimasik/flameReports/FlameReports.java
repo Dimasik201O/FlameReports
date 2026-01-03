@@ -6,6 +6,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dimasik.flameReports.commands.CheatreportCommand;
+import org.dimasik.flameReports.commands.FindplayerCommand;
 import org.dimasik.flameReports.commands.ReportlistCommand;
 import org.dimasik.flameReports.commands.ReportmuteCommand;
 import org.dimasik.flameReports.configuration.ConfigManager;
@@ -36,6 +37,7 @@ public final class FlameReports extends JavaPlugin {
         registerCommand("cheatreport", new CheatreportCommand());
         registerCommand("reportlist", new ReportlistCommand());
         registerCommand("reportmute", new ReportmuteCommand());
+        registerCommand("findplayer", new FindplayerCommand());
 
         var pm = super.getServer().getPluginManager();
         pm.registerEvents(new PlayerListener(), this);

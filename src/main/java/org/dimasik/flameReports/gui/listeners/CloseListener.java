@@ -56,7 +56,6 @@ public class CloseListener extends MenuListener {
                                     player.sendMessage(Parser.color("&#00D5FC ▍&f Статус: &#00D5FCЧит"));
                                     player.sendMessage(Parser.color(""));
                                 }))).thenAccept((av) -> FlameReports.getInstance().getDatabaseManager().getReportBlocks().deleteReportBlock(close.getReportBlock().getId()).thenAccept((v) -> close.close()));
-                ;
             });
         }
         else if(slot == 13){

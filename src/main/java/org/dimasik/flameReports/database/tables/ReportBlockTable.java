@@ -17,6 +17,7 @@ public interface ReportBlockTable {
     CompletableFuture<Void> setStatus(int blockId, EnumReportStatus status);
     CompletableFuture<Void> deleteReportBlock(int blockId);
     CompletableFuture<ReportBlock> getReportBlock(int id);
-    CompletableFuture<ReportBlock> getReportBlock(String moderator);
+    CompletableFuture<ReportBlock> getReportBlockByModerator(String moderator);
+    CompletableFuture<ReportBlock> getReportBlockByPlayer(String player);
     void createTable();
 }

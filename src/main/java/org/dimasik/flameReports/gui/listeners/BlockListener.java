@@ -75,7 +75,7 @@ public class BlockListener extends MenuListener {
             }
         }
         else if(slot == 52){
-            FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(player.getName()).thenAccept(rb -> {
+            FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(rb -> {
                 if (rb != null) {
                     player.sendMessage(Parser.color("&#FF2222▶ &fУ вас &#FF2222уже есть &fактивная жалоба &#FF2222на рассмотрении&f."));
                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);

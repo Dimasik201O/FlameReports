@@ -17,6 +17,10 @@ public class PlayerListener implements Listener {
                 player.getName(),
                 ConfigManager.getString("config.yml", "server.mode", "unknown")
         );
+        FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByPlayer(player.getName()).thenAccept(rb -> {
+            if(rb.getModerator() == null)
+                FlameReports.getInstance().getRedisManager().publishMessage("join " + player.getName() + " " + ConfigManager.getString("config.yml", "server.mode", "unknown"));
+        });
     }
 
     @EventHandler

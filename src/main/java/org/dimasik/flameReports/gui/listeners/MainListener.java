@@ -27,7 +27,7 @@ public class MainListener extends MenuListener {
             ReportBlock reportBlock = main.getData().get(slot);
             if(reportBlock != null) {
                 if (event.isLeftClick()) {
-                    FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(player.getName()).thenAccept(block -> {
+                    FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(block -> {
                         if (block != null) {
                             player.sendMessage(Parser.color("&#FF2222▶ &fУ вас &#FF2222уже есть &fактивная жалоба &#FF2222на рассмотрении&f."));
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
@@ -88,7 +88,7 @@ public class MainListener extends MenuListener {
         }
         else if(slot == 46){
             if(event.isLeftClick()){
-                FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(player.getName()).thenAccept(reportBlock -> {
+                FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(reportBlock -> {
                     if(reportBlock == null)
                         return;
                     FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(reportBlock.getId()).thenAccept(b -> {
@@ -105,7 +105,7 @@ public class MainListener extends MenuListener {
                 });
             }
             else if (event.isRightClick()) {
-                FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(player.getName()).thenAccept(reportBlock -> {
+                FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(reportBlock -> {
                     if(reportBlock == null)
                         return;
                     FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(reportBlock.getId()).thenAccept(b -> {

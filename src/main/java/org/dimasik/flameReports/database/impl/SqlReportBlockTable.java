@@ -243,11 +243,30 @@ public class SqlReportBlockTable implements ReportBlockTable {
     }
 
     @Override
-    public CompletableFuture<ReportBlock> getReportBlock(String moderator) {
+    public CompletableFuture<ReportBlock> getReportBlockByModerator(String moderator) {
         return CompletableFuture.supplyAsync(() -> {
             String sql = "SELECT * FROM report_blocks WHERE moderator = ? AND status = ?";
             try (Connection conn = db.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, moderator);
+                stmt.setString(2, EnumReportStatus.WAITING.name());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next())
+                        return mapReportBlock(rs);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }, db.getExecutor());
+    }
+
+    @Override
+    public CompletableFuture<ReportBlock> getReportBlockByPlayer(String player) {
+        return CompletableFuture.supplyAsync(() -> {
+            int id = db.getPlayers().getPlayer(player).join().getId();
+            String sql = "SELECT * FROM report_blocks WHERE player = ? AND status = ?";
+            try (Connection conn = db.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, id);
                 stmt.setString(2, EnumReportStatus.WAITING.name());
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next())
