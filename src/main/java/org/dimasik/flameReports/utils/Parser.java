@@ -58,6 +58,21 @@ public class Parser {
         }
     }
 
+    public static void sendCopyableMessage(Player player, List<String> lines, String copy, String hover) {
+        for (String line : lines) {
+            hover = color(hover);
+            BaseComponent[] components = parseColoredText(line);
+            for (BaseComponent comp : components) {
+                comp.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy));
+                comp.setHoverEvent(new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder(hover).create()
+                ));
+            }
+            player.spigot().sendMessage(components);
+        }
+    }
+
     public static String stripColor(String text) {
         if (text == null) return "";
 

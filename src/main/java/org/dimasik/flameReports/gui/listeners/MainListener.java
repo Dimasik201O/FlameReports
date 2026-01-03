@@ -13,6 +13,8 @@ import org.dimasik.flameReports.utils.Parser;
 import org.dimasik.menus.inheritance.Menu;
 import org.dimasik.menus.inheritance.MenuListener;
 
+import java.util.List;
+
 public class MainListener extends MenuListener {
     public MainListener() {
         super(Main.class, FlameReports.getInstance(), true);
@@ -34,17 +36,23 @@ public class MainListener extends MenuListener {
                                 if (b == null) {
                                     player.sendMessage(Parser.color("&#FF2222▶ &fЖалоба &#FF2222больше не существует&f."));
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                                    main.compile().open();
                                     return;
                                 }
                                 else if (b.getModerator() != null) {
                                     player.sendMessage(Parser.color("&#FF2222▶ &fЭта жалоба &#FF2222уже на рассмотрении&f."));
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                                    main.compile().open();
                                     return;
                                 }
-                                FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(reportBlock.getId(), player.getName()).thenAccept(av -> {
+                                FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(reportBlock.getId(), player.getName()).thenAccept(
+                                    v -> FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayerById(reportBlock.getPlayerId()).thenAccept(target -> {
                                     player.playSound(player, Sound.ENTITY_ALLAY_ITEM_GIVEN, 1f, 1f);
                                     main.compile().open();
-                                });
+                                    FlameReports.getInstance().getRedisManager().publishMessage("update " + reportBlock.getId());
+                                    player.sendMessage(Parser.color("&#00D5FC▶ &fДело игрока &#00D5FC" + target.getNickname() + "&f взято на рассмотрение."));
+                                    Parser.sendCopyableMessage(player, List.of("             &#00D5FC[Скопировать никнейм]"), target.getNickname(), "Нажми, чтобы скопировать");
+                                }));
                             });
                         }
                     });
@@ -53,6 +61,7 @@ public class MainListener extends MenuListener {
                         if (b == null) {
                             player.sendMessage(Parser.color("&#FF2222▶ &fЖалоба &#FF2222больше не существует&f."));
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                            main.compile().open();
                             return;
                         }
                         player.playSound(player, Sound.ENTITY_ARROW_SHOOT, 1f, 1f);

@@ -1,8 +1,16 @@
 package org.dimasik.flameReports.database;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.dimasik.flameReports.FlameReports;
+import org.dimasik.flameReports.gui.menus.Block;
+import org.dimasik.flameReports.gui.menus.Main;
+import org.dimasik.flameReports.models.ReportBlock;
 import org.dimasik.flameReports.utils.Parser;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -10,6 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.List;
+import java.util.Map;
 
 public class RedisManager {
     private JedisPool jedisPool;
@@ -106,6 +115,31 @@ public class RedisManager {
                             for(Player target : Bukkit.getOnlinePlayers()){
                                 if(target.hasPermission("flamereports.reportmute.notify")){
                                     target.sendMessage(Parser.color("&#FC6F00[РЕПОРТ-МУТ] &fАдминистратор &#FC6F00" + admin + " &fвыдал игроку &#FC6F00" + muted + " &fпо причине '&#FC6F00" + reason + "&f' на &#FC6F00" + duration));
+                                }
+                            }
+                        }
+                        case "update" -> {
+                            String[] split = message.split(" ", 2);
+                            int id = Integer.parseInt(split[1]);
+                            for(Player player : Bukkit.getOnlinePlayers()){
+                                Inventory inventory = player.getOpenInventory().getTopInventory();
+                                InventoryHolder holder = inventory.getHolder();
+                                if(holder instanceof Main gui){
+                                    for(Map.Entry<Integer, ReportBlock> entry : gui.getData().entrySet()){
+                                        if(entry.getValue().getId() == id){
+                                            ItemStack itemStack = new ItemStack(Material.BARRIER);
+                                            ItemMeta itemMeta = itemStack.getItemMeta();
+                                            itemMeta.setDisplayName(" ");
+                                            itemMeta.setLore(List.of(
+                                                    Parser.color("&#FF2222 &n◢&f Эта жалоба взята на рассмотрение"),
+                                                    Parser.color("&#FF2222 ◤&f другим модератором."),
+                                                    Parser.color("")
+                                            ));
+                                            itemStack.setItemMeta(itemMeta);
+                                            inventory.setItem(entry.getKey(), itemStack);
+                                            gui.getData().remove(entry.getKey());
+                                        }
+                                    }
                                 }
                             }
                         }

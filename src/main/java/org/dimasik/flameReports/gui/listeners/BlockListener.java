@@ -12,6 +12,8 @@ import org.dimasik.menus.extensions.Returnable;
 import org.dimasik.menus.inheritance.Menu;
 import org.dimasik.menus.inheritance.MenuListener;
 
+import java.util.List;
+
 public class BlockListener extends MenuListener {
     public BlockListener() {
         super(Block.class, FlameReports.getInstance(), true);
@@ -90,9 +92,14 @@ public class BlockListener extends MenuListener {
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
                             return;
                         }
-                        FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(block.getReportBlock().getId(), player.getName());
-                        player.playSound(player, Sound.ENTITY_ALLAY_ITEM_GIVEN, 1f, 1f);
-                        block.close();
+                        FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(block.getReportBlock().getId(), player.getName()).thenAccept(
+                            v -> FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayerById(block.getReportBlock().getPlayerId()).thenAccept(target -> {
+                                player.playSound(player, Sound.ENTITY_ALLAY_ITEM_GIVEN, 1f, 1f);
+                                block.close();
+                                FlameReports.getInstance().getRedisManager().publishMessage("update " + block.getReportBlock().getId());
+                                player.sendMessage(Parser.color("&#00D5FC▶ &fДело игрока &#00D5FC" + target.getNickname() + "&f взято на рассмотрение."));
+                                Parser.sendCopyableMessage(player, List.of("      &#00D5FC[Скопировать никнейм]"), target.getNickname(), "Нажми, чтобы скопировать");
+                            }));
                     });
                 }
             });
