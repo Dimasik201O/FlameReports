@@ -94,7 +94,7 @@ public class RedisManager {
                             String server = split[2];
                             for(Player target : Bukkit.getOnlinePlayers())
                                 if(target.hasPermission("flamereports.alert"))
-                                    target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ▶ &fИгрок &x&8&6&E&F&8&8" + player + " &fзашел в онлайн на &x&8&6&E&F&8&8" + server + "&f, и на него есть незавершенные жалобы."));
+                                    target.sendMessage(Parser.color("&x&F&7&6&E&0&6 ▶ &fИгрок &x&8&6&E&F&8&8" + player + " &fзашел на &x&8&6&E&F&8&8" + server + "&f, и на него есть незавершенные жалобы."));
                         }
                         case "finish" -> {
                             String[] split = message.split(" ", 3);
