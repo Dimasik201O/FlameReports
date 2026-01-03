@@ -30,7 +30,8 @@ public class BlockListener extends MenuListener {
                 block.close();
                 return;
             }
-            int pages = b.getReportIds().split(",").length;
+            int items = b.getReportIds().split(",").length;
+            int pages = items / 45 + (items % 45 == 0 ? 0 : 1);
 
             newPage = Math.min(pages, newPage);
             newPage = Math.max(1, newPage);
@@ -55,7 +56,8 @@ public class BlockListener extends MenuListener {
                 block.close();
                 return;
             }
-            int pages = b.getReportIds().split(",").length;
+            int items = b.getReportIds().split(",").length;
+            int pages = items / 45 + (items % 45 == 0 ? 0 : 1);
 
             newPage = Math.min(pages, newPage);
             newPage = Math.max(1, newPage);

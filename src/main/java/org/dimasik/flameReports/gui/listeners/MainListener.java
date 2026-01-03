@@ -41,9 +41,10 @@ public class MainListener extends MenuListener {
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
                                     return;
                                 }
-                                FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(reportBlock.getId(), player.getName());
-                                player.playSound(player, Sound.ENTITY_ALLAY_ITEM_GIVEN, 1f, 1f);
-                                main.compile().open();
+                                FlameReports.getInstance().getDatabaseManager().getReportBlocks().setModerator(reportBlock.getId(), player.getName()).thenAccept(av -> {
+                                    player.playSound(player, Sound.ENTITY_ALLAY_ITEM_GIVEN, 1f, 1f);
+                                    main.compile().open();
+                                });
                             });
                         }
                     });

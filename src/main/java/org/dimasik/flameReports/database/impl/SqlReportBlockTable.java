@@ -87,7 +87,7 @@ public class SqlReportBlockTable implements ReportBlockTable {
                             " WHERE FIND_IN_SET(r.id, rb.report_ids)) as max_decency " +
                             "FROM report_blocks rb " +
                             "JOIN players p ON rb.player = p.id " +
-                            "WHERE (rb.moderator IS NULL OR rb.moderator != ?) AND rb.status = ? ");
+                            "WHERE rb.moderator IS NULL AND rb.status = ? ");
 
             if (onlineOnly)
                 sql.append("AND p.server IS NOT NULL ");
@@ -112,10 +112,9 @@ public class SqlReportBlockTable implements ReportBlockTable {
             sql.append("LIMIT ? OFFSET ?");
 
             try (Connection conn = db.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
-                stmt.setString(1, viewerName);
-                stmt.setString(2, EnumReportStatus.WAITING.name());
-                stmt.setInt(3, size);
-                stmt.setInt(4, offset);
+                stmt.setString(1, EnumReportStatus.WAITING.name());
+                stmt.setInt(2, size);
+                stmt.setInt(3, offset);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
@@ -135,7 +134,7 @@ public class SqlReportBlockTable implements ReportBlockTable {
             StringBuilder sql = new StringBuilder(
                     "SELECT COUNT(*) FROM report_blocks rb " +
                             "JOIN players p ON rb.player = p.id " +
-                            "WHERE (rb.moderator IS NULL OR rb.moderator != ?) AND rb.status = ? ");
+                            "WHERE rb.moderator IS NULL AND rb.status = ? ");
 
             if (onlineOnly)
                 sql.append("AND p.server IS NOT NULL ");
@@ -143,8 +142,7 @@ public class SqlReportBlockTable implements ReportBlockTable {
                 sql.append("AND p.server IS NULL ");
 
             try (Connection conn = db.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
-                stmt.setString(1, viewerName);
-                stmt.setString(2, EnumReportStatus.WAITING.name());
+                stmt.setString(1, EnumReportStatus.WAITING.name());
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {

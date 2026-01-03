@@ -41,21 +41,20 @@ public class Block extends Menu implements Returnable {
         Player player = FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayerById(reportBlock.getPlayerId()).join();
         inventory = Bukkit.createInventory(this, 54, "Дело игрока " + player.getNickname());
         List<Integer> ids = Arrays.stream(reportBlock.getReportIds().split(",")).map(Integer::valueOf).toList();
-        for(int slot = 0; slot < 45 && slot < ids.size(); slot++){
+        for(int slot = (page - 1) * 45; slot < page * 45 && slot < ids.size(); slot++){
             final int finalSlot = slot;
             FlameReports.getInstance().getDatabaseManager().getReports().getReport(ids.get(slot)).thenAccept(
                     report -> FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayer(report.getReporterName()).thenAccept(
                             sender -> FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayer(report.getSuspectName()).thenAccept(target -> {
-                                ItemStack itemStack = HeadUtil.setPlayer(new ItemStack(Material.PLAYER_HEAD), sender.getNickname());
+                                ItemStack itemStack = HeadUtil.setPlayer(new ItemStack(sender.getNickname().equalsIgnoreCase("Console") ? Material.DRAGON_HEAD : Material.PLAYER_HEAD), sender.getNickname());
                                 ItemMeta itemMeta = itemStack.getItemMeta();
                                 itemMeta.setDisplayName(Parser.color(" "));
                                 List<String> lore = new ArrayList<>();
-                                lore.add(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + sender.getNickname() + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
+                                lore.add(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + (sender.getNickname().equalsIgnoreCase("Console") ? "System" : sender.getNickname()) + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
                                 lore.add(Parser.color("&#00D5FC &n▍&f Жалоба создана: &#00D5FC" + Parser.formatTime(report.getCreatedAt())));
                                 lore.add(Parser.color("&#00D5FC &n▍&f Комментарий:"));
                                 lore.add(Parser.color("&#00D5FC ▍&f   &#00D5FC" + report.getReason()));
                                 lore.add(Parser.color(""));
-                                lore.add(Parser.color("   &8&o#" + report.getId()));
                                 itemMeta.setLore(lore);
                                 itemStack.setItemMeta(itemMeta);
                                 inventory.setItem(finalSlot, itemStack);

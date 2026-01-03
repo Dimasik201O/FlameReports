@@ -48,7 +48,7 @@ public class CloseListener extends MenuListener {
                                     player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                                     player.sendMessage(Parser.color(""));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Дело игрока &#00D5FC" + target.getNickname() + " &fуспешно закрыто."));
-                                    player.sendMessage(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + sender.getNickname() + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
+                                    player.sendMessage(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + (sender.getNickname().equalsIgnoreCase("Console") ? "System" : sender.getNickname()) + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Подозреваемый: &#00D5FC" + target.getNickname() + " &7(&#22FF22ПЖ: " + target.getCorrectReports() + " &7| &#FF2222ЛЖ: " + target.getIncorrectReports() + "&7)"));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Жалоба создана: &#00D5FC" + Parser.formatTime(report.getCreatedAt())));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Комментарий:"));
@@ -91,7 +91,7 @@ public class CloseListener extends MenuListener {
                                     player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                                     player.sendMessage(Parser.color(""));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Дело игрока &#00D5FC" + target.getNickname() + " &fуспешно закрыто."));
-                                    player.sendMessage(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + sender.getNickname() + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
+                                    player.sendMessage(Parser.color("&#00D5FC &n▍&f Заявитель: &#00D5FC" + (sender.getNickname().equalsIgnoreCase("Console") ? "System" : sender.getNickname()) + " &7(&#22FF22ПЖ: " + sender.getCorrectReports() + " &7| &#FF2222ЛЖ: " + sender.getIncorrectReports() + "&7)"));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Подозреваемый: &#00D5FC" + target.getNickname() + " &7(&#22FF22ПЖ: " + target.getCorrectReports() + " &7| &#FF2222ЛЖ: " + target.getIncorrectReports() + "&7)"));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Жалоба создана: &#00D5FC" + Parser.formatTime(report.getCreatedAt())));
                                     player.sendMessage(Parser.color("&#00D5FC &n▍&f Комментарий:"));

@@ -191,6 +191,18 @@ public class SqlPlayerTable implements PlayerTable {
 
         try (Connection conn = db.getConnection(); Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+
+            boolean consoleExists = false;
+            try (ResultSet rs = stmt.executeQuery("SELECT 1 FROM players WHERE nickname = 'Console'")) {
+                if (rs.next()) {
+                    consoleExists = true;
+                }
+            }
+
+            if (!consoleExists) {
+                stmt.execute("INSERT INTO players (nickname, correct_reports, incorrect_reports, server, created_at) " +
+                        "VALUES ('Console', 0, 0, NULL, NOW())");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -62,15 +62,17 @@ public class CheatreportCommand implements TabExecutor {
                         return;
                     }
                     FlameReports.getInstance().getDatabaseManager().getReports().hasReport(sender.getName(), target).thenAccept(b -> {
-                        if(b) {
+                        if(sender instanceof Player && b) {
                             sender.sendMessage(Parser.color("&#FF2222 ▶ &fВы уже отправили жалобу на этого игрока."));
                             return;
                         }
                         String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                         FlameReports.getInstance().getDatabaseManager().executeAddReportTransaction(target, sender.getName(), reason).thenAccept(
                                 integer -> sender.sendMessage(Parser.color("&#00D5FC ▶ &fВаша жалоба &#00D5FC#" + integer + "&f была &#00D5FCпринята&f. Наши сотрудники &#00D5FCрассмотрят ваш случай и проведут соответствующую проверку&f."))).thenAccept(
-                                        (v) -> {FlameReports.getInstance().getRedisManager().publishMessage("alert " + p.getNickname() + " " + ConfigManager.getString("config.yml", "server.mode", "unknown"));
-                        });
+                                        (v) -> {
+                                            if(sender instanceof Player)
+                                                FlameReports.getInstance().getRedisManager().publishMessage("alert " + p.getNickname() + " " + ConfigManager.getString("config.yml", "server.mode", "unknown"));
+                                        });
                     });
                 });
                 return;

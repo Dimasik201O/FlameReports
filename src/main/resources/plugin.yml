@@ -6,7 +6,10 @@ commands:
   cheatreport:
     aliases:
       - cr
+      - report
   reportlist:
+    aliases:
+      - reports
     permission: flamereports.reportlist
   reportmute:
     permission: flamereports.reportmute
