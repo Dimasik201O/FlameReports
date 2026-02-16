@@ -1,7 +1,12 @@
 package org.dimasik.flameReports.gui.listeners;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.dimasik.flameReports.FlameReports;
@@ -91,34 +96,50 @@ public class MainListener extends MenuListener {
                 FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(reportBlock -> {
                     if(reportBlock == null)
                         return;
-                    FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(reportBlock.getId()).thenAccept(b -> {
-                        if (b == null) {
-                            player.sendMessage(Parser.color("&#FF2222▶ &fЖалоба &#FF2222больше не существует&f."));
-                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
-                            return;
-                        }
-                        player.playSound(player, Sound.ENTITY_ARROW_SHOOT, 1f, 1f);
-                        Close close = new Close(b);
-                        close.setBack(menu);
-                        close.setPlayer(player).compile().open();
-                    });
+                    player.playSound(player, Sound.ENTITY_ARROW_SHOOT, 1f, 1f);
+                    Close close = new Close(reportBlock);
+                    close.setBack(menu);
+                    close.setPlayer(player).compile().open();
                 });
             }
             else if (event.isRightClick()) {
                 FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(reportBlock -> {
                     if(reportBlock == null)
                         return;
-                    FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlock(reportBlock.getId()).thenAccept(b -> {
-                        if (b == null) {
-                            player.sendMessage(Parser.color("&#FF2222▶ &fЖалоба &#FF2222больше не существует&f."));
-                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
-                            return;
-                        }
-                        player.playSound(player, Sound.ENTITY_ARROW_SHOOT, 1f, 1f);
-                        Block block = new Block(b);
-                        block.setBack(menu);
-                        block.setPlayer(player).compile().open();
-                    });
+                    player.playSound(player, Sound.ENTITY_ARROW_SHOOT, 1f, 1f);
+                    Block block = new Block(reportBlock);
+                    block.setBack(menu);
+                    block.setPlayer(player).compile().open();
+                });
+            }
+            else if(event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP || event.getClick() == ClickType.MIDDLE){
+                FlameReports.getInstance().getDatabaseManager().getReportBlocks().getReportBlockByModerator(player.getName()).thenAccept(reportBlock -> {
+                    if(reportBlock == null)
+                        return;
+                    org.dimasik.flameReports.models.Player target = FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayerById(reportBlock.getPlayerId()).join();
+                    Player teleportTo = Bukkit.getPlayerExact(target.getNickname());
+                    if(teleportTo == null)
+                        if(target.getServer() == null)
+                            player.sendMessage(Parser.color("&#00D5FC ▶ &fИгрок оффлайн"));
+                        else
+                            FlameReports.getInstance().getDatabaseManager().getActionsTable().setAction(player.getName(), "spectate " + target.getNickname()).thenAccept((v) -> {
+                                FlameReports.getInstance().getServerHandler().sendPlayerToServer(player, target.getServer());
+                                player.sendMessage(Parser.color("&#00D5FC ▶ &fТелепортация..."));
+                            });
+                    else {
+                        Bukkit.getScheduler().runTask(FlameReports.getInstance(), () -> {
+                            if (Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
+                                Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+                                assert essentials != null;
+                                User user = essentials.getUser(player);
+                                user.setVanished(true);
+                            }
+                            player.setGameMode(GameMode.SPECTATOR);
+                            player.teleport(teleportTo);
+                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+                            player.sendMessage(Parser.color("&#00D5FC ▶ &fТелепортация..."));
+                        });
+                    }
                 });
             }
         }

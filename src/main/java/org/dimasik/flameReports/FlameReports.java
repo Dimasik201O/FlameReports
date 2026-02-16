@@ -5,16 +5,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.dimasik.flameReports.commands.CheatreportCommand;
-import org.dimasik.flameReports.commands.FindplayerCommand;
-import org.dimasik.flameReports.commands.ReportlistCommand;
-import org.dimasik.flameReports.commands.ReportmuteCommand;
+import org.dimasik.flameReports.commands.*;
 import org.dimasik.flameReports.configuration.ConfigManager;
 import org.dimasik.flameReports.database.DatabaseManager;
 import org.dimasik.flameReports.database.RedisManager;
 import org.dimasik.flameReports.gui.listeners.BlockListener;
 import org.dimasik.flameReports.gui.listeners.CloseListener;
 import org.dimasik.flameReports.gui.listeners.MainListener;
+import org.dimasik.flameReports.handlers.ServerHandler;
 import org.dimasik.flameReports.listeners.PlayerListener;
 
 import java.io.File;
@@ -25,6 +23,7 @@ public final class FlameReports extends JavaPlugin {
     private static FlameReports instance;
     private DatabaseManager databaseManager;
     private RedisManager redisManager;
+    private ServerHandler serverHandler;
 
     @Override
     public void onEnable() {
@@ -33,11 +32,14 @@ public final class FlameReports extends JavaPlugin {
         setupConfig();
         setupDatabase();
         setupRedis();
+        serverHandler = new ServerHandler();
+        serverHandler.registerBungeeChannel();
 
         registerCommand("cheatreport", new CheatreportCommand());
         registerCommand("reportlist", new ReportlistCommand());
         registerCommand("reportmute", new ReportmuteCommand());
         registerCommand("findplayer", new FindplayerCommand());
+        registerCommand("globalteleport", new GlobalteleportCommand());
 
         var pm = super.getServer().getPluginManager();
         pm.registerEvents(new PlayerListener(), this);
@@ -100,8 +102,6 @@ public final class FlameReports extends JavaPlugin {
             FlameReports.getInstance().getDatabaseManager().getPlayers().setOrCreateServer(
                     player.getName(), null
             );
-        if(databaseManager != null)
-            databaseManager.close();
         if(redisManager != null)
             redisManager.close();
     }

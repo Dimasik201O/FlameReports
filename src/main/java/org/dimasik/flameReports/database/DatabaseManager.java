@@ -3,14 +3,8 @@ package org.dimasik.flameReports.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
-import org.dimasik.flameReports.database.impl.SqlMuteTable;
-import org.dimasik.flameReports.database.impl.SqlPlayerTable;
-import org.dimasik.flameReports.database.impl.SqlReportBlockTable;
-import org.dimasik.flameReports.database.impl.SqlReportTable;
-import org.dimasik.flameReports.database.tables.MuteTable;
-import org.dimasik.flameReports.database.tables.PlayerTable;
-import org.dimasik.flameReports.database.tables.ReportBlockTable;
-import org.dimasik.flameReports.database.tables.ReportTable;
+import org.dimasik.flameReports.database.impl.*;
+import org.dimasik.flameReports.database.tables.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,6 +16,7 @@ public class DatabaseManager {
     private final ReportTable reports;
     private final ReportBlockTable reportBlocks;
     private final MuteTable mutes;
+    private final ActionsTable actionsTable;
     private final java.util.concurrent.ExecutorService executor;
 
     public DatabaseManager(String host, String user, String password, String database) {
@@ -41,6 +36,7 @@ public class DatabaseManager {
         this.reports = new SqlReportTable(this);
         this.reportBlocks = new SqlReportBlockTable(this);
         this.mutes = new SqlMuteTable(this);
+        this.actionsTable = new SqlActionsTable(this);
 
         initTables();
     }
@@ -63,6 +59,7 @@ public class DatabaseManager {
         this.reports.createTable();
         this.reportBlocks.createTable();
         this.mutes.createTable();
+        this.actionsTable.createTable();
     }
 
     public java.util.concurrent.CompletableFuture<Integer> executeAddReportTransaction(String suspectName,

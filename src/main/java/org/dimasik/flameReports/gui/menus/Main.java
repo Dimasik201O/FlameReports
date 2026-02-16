@@ -101,6 +101,7 @@ public class Main extends Menu {
                                             lore.add(Parser.color("&#00D5FC ▍&f   &#00D5FC" + report.getReason()));
                                             lore.add(Parser.color(""));
                                             lore.add(Parser.color(" &#00D5FC▶ [ЛКМ] &fЗакрыть со статусом"));
+                                            lore.add(Parser.color(" &#00D5FC▶ [Q | СКМ] &fТелепортироваться"));
                                             lore.add(Parser.color(" &#00D5FC&n&l◢&#00D5FC [ПКМ] &fПосмотреть все жалобы"));
                                             lore.add(Parser.color(" &#00D5FC&l◤&#00D5FC           &fПодано &#00D5FC" + reportBlock.getReportIds().split(",").length + " жалоб"));
                                             itemMeta.setLore(lore);

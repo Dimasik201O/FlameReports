@@ -15,3 +15,9 @@ commands:
     permission: flamereports.reportmute
   findplayer:
     permission: flamereports.findplayer
+  globalteleport:
+    aliases:
+      - gtp
+      - gteleport
+      - globaltp
+    permission: flamereports.globalteleport
