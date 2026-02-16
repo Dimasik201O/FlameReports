@@ -23,7 +23,7 @@ public class FindplayerCommand implements TabExecutor {
 
         String player = args[0];
         FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayer(player).thenAccept(p -> {
-            if(p.getServer() == null)
+            if(p == null || p.getServer() == null)
                 sender.sendMessage(Parser.color("&#00D5FC ▶ &fИгрок оффлайн"));
             else
                 sender.sendMessage(Parser.color("&#00D5FC ▶ &fИгрок &#00D5FC" + p.getNickname() + " &fнаходится на &#00D5FC" + p.getServer()));

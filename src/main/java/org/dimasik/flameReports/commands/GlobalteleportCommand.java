@@ -31,7 +31,7 @@ public class GlobalteleportCommand implements TabExecutor {
         Player teleportTo = Bukkit.getPlayerExact(target);
         if(teleportTo == null)
             FlameReports.getInstance().getDatabaseManager().getPlayers().getPlayer(target).thenAccept(p -> {
-                if(p.getServer() == null)
+                if(p == null || p.getServer() == null)
                     sender.sendMessage(Parser.color("&#00D5FC ▶ &fИгрок оффлайн"));
                 else
                     FlameReports.getInstance().getDatabaseManager().getActionsTable().setAction(player.getName(), "spectate " + p.getNickname()).thenAccept((v) -> {
